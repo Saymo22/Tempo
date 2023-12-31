@@ -1,0 +1,109 @@
+"use strict";
+/*
+    Descrição: O Codigo está uma zona deve ser reescrito 
+    Apis: 
+        Google, bigdatacloud => gerenciar localização
+        climatempo => obter dados do clima
+
+*/
+var resultapi = null;
+var locationbygoogle = null;
+
+const climatempo_token = 'dab70956321385527f70662c1c145e8c';
+
+
+$(document).ready(()=>{
+    getLocation();
+
+    //Pega texto geral do brasil
+    const api1 = 'https://apiadvisor.climatempo.com.br/api/v1/anl/synoptic/locale/BR?token=' + climatempo_token;
+    $.ajax({
+        method:'get',
+        url: api1,
+        success:(result)=>{
+            $('.evento-pro-front-resolver').show();
+            $('#msg').html(result[0].text);
+        }
+    });
+})
+
+
+
+// bigdatacloud
+let apiKey = 'bdc_56a7d8d4697f4407935b120980f258b0';
+
+$.ajax({
+    //Inicia o input no estado atual
+    method:"get",
+    url: 'https://api.bigdatacloud.net/data/ip-geolocation?lang=pt&key=' + apiKey,
+    success:(data)=>{
+        $("#location-input").val(data.location.city);
+    }
+});
+
+
+
+////////
+// Google API
+///////
+const CONFIGURATION = {
+  "ctaTitle": "Checkout",
+  "mapOptions": {"center":{"lat":-14.2400,"lng":-53.1805},"fullscreenControl":false,"mapTypeControl":false,"streetViewControl":true,"zoom":11,"zoomControl":true,"maxZoom":22,"mapId":""},
+  "mapsApiKey": "AIzaSyAKEKQxfBgKWb0N4WcgQWidTzHYc1REMF4",
+  "capabilities": {"addressAutocompleteControl":true,"mapDisplayControl":false,"ctaControl":false}
+};
+
+const ADDRESS_COMPONENT_TYPES_IN_FORM = [
+  'location',
+  //'locality',
+];
+
+function getFormInputElement(componentType) {
+  return document.getElementById(`${componentType}-input`);
+}
+
+async function initMap() {
+  const {Autocomplete} = google.maps.places;
+
+  const autocomplete = new Autocomplete(getFormInputElement('location'), {
+    fields: ['address_components','geometry', 'name'],
+    types: ['address'],
+  });
+
+  autocomplete.addListener('place_changed', () => {
+    const place = autocomplete.getPlace();
+    if (!place.geometry) {
+      console.log(`No details available for input: '${place.name}'`);
+      return;
+    }
+  });
+}
+
+
+
+function getLocation() {
+    if (navigator.geolocation)
+        navigator.geolocation.getCurrentPosition(showPosition);
+    else
+        x.innerHTML = "Geolocation is not supported by this browser.";
+}
+
+function showPosition(position) {
+    console.log("Latitude: " + position.coords.latitude);
+    console.log("Longitude: " + position.coords.longitude);
+
+
+    const api = 'https://apiadvisor.climatempo.com.br/api/v1/climate/rain/locale/'+
+         position.coords.latitude + '/' + 
+         position.coords.longitude  + '?token=' + climatempo_token;
+
+    $.ajax({
+        method:'get',
+        url: api,
+        success:(result)=>{
+            resultapi = result;
+
+        }
+    });
+
+}

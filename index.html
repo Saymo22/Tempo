@@ -7,15 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Previsão do Tempo</title>
     <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
-
 <body>
-
     <div class="container">
         <div class="search-box">
             <i class='bx bxs-map'></i>
-            <input type="text" placeholder="Digite a sua localização">
+            <input type="text" id="location-input" placeholder="Digite a sua localização">
             <button class="bx bx-search"></button>
         </div>
 
@@ -23,8 +22,8 @@
             <div class="box">
                 <div class="info-weather">
                     <div class="weather">
-                        <img src="images/cloud.png">
-                        <p class="temperature">16<span>°C</span></p>
+                        <img id="imgtype" src="images/clouds.png">
+                        <p class="temperature">-<span>°C</span></p>
                         <p class="description">Nublado</p>
                     </div>
                 </div>
@@ -36,7 +35,7 @@
                 <i class='bx bx-water'></i>
                 <div class="text">
                     <div class="info-humidity">
-                        <span>0</span>
+                        <span id="humidade">0</span>
                     </div>
                     <p>Umidade</p>
                 </div>
@@ -52,9 +51,16 @@
                 </div>
             </div>
         </div>
+        <div class="evento-pro-front-resolver" style="display:none">
+            <br/><br/><br/><br/><br/><br/><br/><br/>
+            <p id="msg"></p>
+        </div>
     </div>
 
-    <script src="script.js"></script>
+    <script type="text/javascript" src="script.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKEKQxfBgKWb0N4WcgQWidTzHYc1REMF4&libraries=places,marker&callback=initMap&solution_channel=GMP_QB_addressselection_v2_cA" async defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
 </body>
 
 </html>
