@@ -3,6 +3,20 @@
 $(document).ready(()=>{
 
     let apiKey = 'bdc_56a7d8d4697f4407935b120980f258b0';
+    getLocation();
+
+    const climatempo_token = '80383ef15d515451a3bcc16bd6f8b5c6';
+
+    //Pega texto geral do brasil
+    const api1 = 'https://apiadvisor.climatempo.com.br/api/v1/anl/synoptic/locale/BR?token=' + climatempo_token;
+    $.ajax({
+        method:'get',
+        url: api1,
+        success:(result)=>{
+            $('.evento-pro-front-resolver').show();
+            $('#msg').html(result[0].text);
+        }
+    });
 
     $.ajax({
         //Inicia o input no estado atual
@@ -45,6 +59,20 @@ function obter_clima(estado)
 
 
 
+
+
+function getLocation() {
+    if (navigator.geolocation)
+        navigator.geolocation.getCurrentPosition(showPosition);
+    else
+        x.innerHTML = "Geolocation is not supported by this browser.";
+}
+
+function showPosition(position) {
+    console.log("Latitude: " + position.coords.latitude);
+    console.log("Longitude: " + position.coords.longitude); 
+
+}
 
 const CONFIGURATION = {
     "ctaTitle": "Checkout",
