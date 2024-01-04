@@ -1,11 +1,13 @@
+const climatempo_token = '80383ef15d515451a3bcc16bd6f8b5c6';
+const bigdatacloud = 'bdc_56a7d8d4697f4407935b120980f258b0';
+const openweathermap = '2c65989416a1205d0ea77d800cbcb19b';
+
 
 
 $(document).ready(()=>{
 
-    let apiKey = 'bdc_56a7d8d4697f4407935b120980f258b0';
     getLocation();
 
-    const climatempo_token = '80383ef15d515451a3bcc16bd6f8b5c6';
 
     //Pega texto geral do brasil
     const api1 = 'https://apiadvisor.climatempo.com.br/api/v1/anl/synoptic/locale/BR?token=' + climatempo_token;
@@ -21,7 +23,7 @@ $(document).ready(()=>{
     $.ajax({
         //Inicia o input no estado atual
         method:"get",
-        url: 'https://api.bigdatacloud.net/data/ip-geolocation?lang=pt&key=' + apiKey,
+        url: 'https://api.bigdatacloud.net/data/ip-geolocation?lang=pt&key=' + bigdatacloud,
         success:(data)=>{
             state = data.location.isoPrincipalSubdivisionCode.split('-')[1];
             var x = data.location.city;
@@ -32,13 +34,10 @@ $(document).ready(()=>{
 });
 
 
-var climatempo_token = '80383ef15d515451a3bcc16bd6f8b5c6';
-
-
 function obter_clima(estado)
 {
     console.log(estado);
-    const openweathermap = '2c65989416a1205d0ea77d800cbcb19b';
+    estado = encodeURIComponent(estado);
     var url = 'https://api.openweathermap.org/data/2.5/weather?q=' + estado + '&appid=' + openweathermap + '&lang=pt_br';
 
     $.ajax({
@@ -57,10 +56,6 @@ function obter_clima(estado)
 }
 
 
-
-
-
-
 function getLocation() {
     if (navigator.geolocation)
         navigator.geolocation.getCurrentPosition(showPosition);
@@ -70,10 +65,11 @@ function getLocation() {
 
 function showPosition(position) {
     console.log("Latitude: " + position.coords.latitude);
-    console.log("Longitude: " + position.coords.longitude); 
+    console.log("Longitude: " + position.coords.longitude);
+    obter_clima(position.coords.latitude + ',' + position.coords.longitude);
 
 }
-
+var globalk;
 const CONFIGURATION = {
     "ctaTitle": "Checkout",
     "mapOptions": {"center":{"lat":-14.2400,"lng":-53.1805},"fullscreenControl":false,"mapTypeControl":false,"streetViewControl":true,"zoom":11,"zoomControl":true,"maxZoom":22,"mapId":""},
@@ -99,11 +95,13 @@ async function initMap() {
     });
   
     autocomplete.addListener('place_changed', () => {
-      const place = autocomplete.getPlace();
-      if (!place.geometry) {
-        console.log(`No details available for input: '${place.name}'`);
-        return;
-      }
+      //const place = autocomplete.getPlace();
+      //if (!place.geometry) {
+        //console.log(`No details available for input: '${place.name}'`);
+        ///return;
+      //}
+      obter_clima($('#location-input').val());
+
     });
   }
   
